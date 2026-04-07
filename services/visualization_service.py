@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import matplotlib
+matplotlib.use('Qt5Agg')
 
 class VisualizationService:
     def __init__(self):
