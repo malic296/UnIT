@@ -20,19 +20,6 @@ class VisualizationService:
         plt.show()
 
     def plot_vegetation_vs_heat(self, ndvi_matrix, lst_matrix, mask_service=None):
-        # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-        #
-        # im1 = ax1.imshow(ndvi_matrix, cmap='RdYlGn')
-        # ax1.set_title("Mapa vegetace (NDVI)")
-        # fig.colorbar(im1, ax=ax1, label="Index zeleně")
-        #
-        # im2 = ax2.imshow(lst_matrix, cmap='coolwarm')
-        # ax2.set_title("Teplotní mapa (LST)")
-        # fig.colorbar(im2, ax=ax2, label="Teplota [°C]")
-        #
-        # plt.tight_layout()
-        # plt.show()
-
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
         im1 = ax1.imshow(ndvi_matrix, cmap='RdYlGn')
