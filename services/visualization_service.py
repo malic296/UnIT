@@ -27,8 +27,8 @@ class VisualizationService:
         h, w = ndvi_matrix.shape
         rgb_map = np.zeros((h, w, 3))
 
-        water_mask = ndvi_matrix < -0.3
-        land_mask = (ndvi_matrix >= -0.3) & (ndvi_matrix < 0.2)
+        water_mask = ndvi_matrix < 0
+        land_mask = (ndvi_matrix >= 0) & (ndvi_matrix < 0.2)
         veg_mask = ndvi_matrix >= 0.2
 
         rgb_map[water_mask] = [0, 0.3, 0.8]
