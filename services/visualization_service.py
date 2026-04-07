@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import matplotlib
 matplotlib.use('Qt5Agg')
@@ -20,24 +21,36 @@ class VisualizationService:
         plt.title("Detekce městských tepelných ostrovů (Hotspots)")
         plt.show()
 
-    def plot_vegetation_vs_heat(self, ndvi_matrix, lst_matrix, mask_service=None):
+    def plot_vegetation_vs_heat(self, ndvi_matrix, lst_matrix):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
-        im1 = ax1.imshow(ndvi_matrix, cmap='RdYlGn')
-        ax1.set_title("Mapa vegetace (NDVI)")
-        fig.colorbar(im1, ax=ax1, label="Index zeleně")
+        h, w = ndvi_matrix.shape
+        rgb_map = np.zeros((h, w, 3))
 
-        if mask_service is not None:
-            water_mask = mask_service.get_water_mask(ndvi_matrix)
-            ax1.imshow(water_mask, cmap='Blues', alpha=0.5)
+        water_mask = ndvi_matrix < -0.3
+        land_mask = (ndvi_matrix >= -0.3) & (ndvi_matrix < 0.2)
+        veg_mask = ndvi_matrix >= 0.2
 
-        im2 = ax2.imshow(lst_matrix, cmap='coolwarm')
+        rgb_map[water_mask] = [0, 0.3, 0.8]
+        rgb_map[land_mask] = [0.9, 0.8, 0.4]
+        rgb_map[veg_mask] = [0.1, 0.6, 0.1]
+
+        ax1.imshow(rgb_map)
+        ax1.set_title("Klasifikace povrchu (NDVI)")
+
+        legend_elements = [
+            Line2D([0], [0], color=[0, 0.3, 0.8], lw=4, label='Voda'),
+            Line2D([0], [0], color=[0.9, 0.8, 0.4], lw=4, label='Země/Beton'),
+            Line2D([0], [0], color=[0.1, 0.6, 0.1], lw=4, label='Vegetace')
+        ]
+        ax1.legend(handles=legend_elements, loc='upper right')
+
+        im2 = ax2.imshow(lst_matrix, cmap='magma')
         ax2.set_title("Teplotní mapa (LST)")
         fig.colorbar(im2, ax=ax2, label="Teplota [°C]")
 
-        if mask_service is not None:
-            water_mask = mask_service.get_water_mask(ndvi_matrix)
-            ax2.imshow(water_mask, cmap='Blues', alpha=0.5)
+        water_overlay = np.where(water_mask, 1.0, np.nan)
+        ax2.imshow(water_overlay, cmap='Blues_r', alpha=0.5)
 
         plt.tight_layout()
         plt.show()

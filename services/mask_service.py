@@ -9,7 +9,7 @@ class MaskService:
         return ndvi_matrix >= self.veg_threshold
 
     def get_concrete_mask(self, ndvi_matrix):
-        return (ndvi_matrix >= 0) & (ndvi_matrix < self.con_threshold)
+        return ndvi_matrix < self.con_threshold
 
     def get_water_mask(self, ndvi_matrix):
-        return ndvi_matrix < 0
+        return ndvi_matrix < -0.99999
