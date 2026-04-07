@@ -15,8 +15,8 @@ class SatelliteDataService:
             return src.read(1).astype('float32'), src.shape
 
     def get_ndvi_matrix(self):
-        red, shape = self._read_tiff("B04.tiff")
-        nir, _ = self._read_tiff("B08.tiff")
+        red, shape = self._read_tiff("B4.tiff")
+        nir, _ = self._read_tiff("B8.tiff")
 
         ndvi = (nir - red) / (nir + red + 1e-10)
         return ndvi, shape
