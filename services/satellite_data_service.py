@@ -24,8 +24,9 @@ class SatelliteDataService:
     def get_lst_matrix(self, target_shape):
         lst_raw, current_shape = self._read_tiff("LST.tiff")
 
-        if np.nanmax(lst_raw) > 200:
-            lst_raw -= 273.15
+        # if np.nanmax(lst_raw) > 200:
+        #     lst_raw -= 273.15
+
 
         print(f"Teploty načteny. Rozsah: {np.nanmin(lst_raw):.1f}°C až {np.nanmax(lst_raw):.1f}°C")
 

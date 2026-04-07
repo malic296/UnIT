@@ -1,7 +1,7 @@
 import numpy as np
 
 class MaskService:
-    def __init__(self, vegetation_threshold=0.4, concrete_threshold=0.4):
+    def __init__(self, vegetation_threshold=0.35, concrete_threshold=0.35):
         self.veg_threshold = vegetation_threshold
         self.con_threshold = concrete_threshold
 

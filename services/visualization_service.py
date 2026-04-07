@@ -19,19 +19,42 @@ class VisualizationService:
         plt.title("Detekce městských tepelných ostrovů (Hotspots)")
         plt.show()
 
-    def plot_vegetation_vs_heat(self, ndvi_matrix, lst_matrix):
+    def plot_vegetation_vs_heat(self, ndvi_matrix, lst_matrix, mask_service=None):
+        # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+        #
+        # im1 = ax1.imshow(ndvi_matrix, cmap='RdYlGn')
+        # ax1.set_title("Mapa vegetace (NDVI)")
+        # fig.colorbar(im1, ax=ax1, label="Index zeleně")
+        #
+        # im2 = ax2.imshow(lst_matrix, cmap='coolwarm')
+        # ax2.set_title("Teplotní mapa (LST)")
+        # fig.colorbar(im2, ax=ax2, label="Teplota [°C]")
+        #
+        # plt.tight_layout()
+        # plt.show()
+
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
         im1 = ax1.imshow(ndvi_matrix, cmap='RdYlGn')
         ax1.set_title("Mapa vegetace (NDVI)")
         fig.colorbar(im1, ax=ax1, label="Index zeleně")
 
+        if mask_service is not None:
+            water_mask = mask_service.get_water_mask(ndvi_matrix)
+            ax1.imshow(water_mask, cmap='Blues', alpha=0.5)
+
         im2 = ax2.imshow(lst_matrix, cmap='coolwarm')
         ax2.set_title("Teplotní mapa (LST)")
         fig.colorbar(im2, ax=ax2, label="Teplota [°C]")
 
+        if mask_service is not None:
+            water_mask = mask_service.get_water_mask(ndvi_matrix)
+            ax2.imshow(water_mask, cmap='Blues', alpha=0.5)
+
         plt.tight_layout()
         plt.show()
+
+
 
     def plot_correlation_scatter(self, ndvi_matrix, lst_matrix):
         x = ndvi_matrix.flatten()[::50]
