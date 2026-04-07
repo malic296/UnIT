@@ -22,19 +22,13 @@ class SatelliteDataService:
         return ndvi, shape
 
     def get_lst_matrix(self, target_shape):
-        # Načteme ten nový TIFF
         lst_raw, current_shape = self._read_tiff("LST.tiff")
 
-        # 1. Kontrola Kelvinů
-        # Pokud jsou data kolem 300, jsou to Kelviny -> na Celsia
         if np.nanmax(lst_raw) > 200:
             lst_raw -= 273.15
 
         print(f"Teploty načteny. Rozsah: {np.nanmin(lst_raw):.1f}°C až {np.nanmax(lst_raw):.1f}°C")
 
-        # 2. Resampling (Sjednocení s NDVI)
-        # I když je to TIFF, pořád má Sentinel-3 jiné rozlišení než Sentinel-2,
-        # takže ten zoom tam musí zůstat.
         zoom_factor = (target_shape[0] / current_shape[0],
                        target_shape[1] / current_shape[1])
 
